@@ -1,28 +1,35 @@
 package com.lolatech.selectionsystem.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "user")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
-    private String username;
+    @Email(message = "*Please enter a valid email")
+    @NotEmpty(message = "*Please enter an email")
+    private String email;
 
     @Column(name = "password", nullable = false)
+    @Length(min = 8, message = "*Password must have at least 8 characters")
+    @NotEmpty(message = "*Please enter a password")
     private String password;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_permission", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions;
 }
