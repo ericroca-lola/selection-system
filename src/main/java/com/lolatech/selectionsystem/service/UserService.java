@@ -1,8 +1,8 @@
 package com.lolatech.selectionsystem.service;
 
-import com.lolatech.selectionsystem.model.Permission;
+import com.lolatech.selectionsystem.model.Role;
 import com.lolatech.selectionsystem.model.User;
-import com.lolatech.selectionsystem.repository.PermissionRepository;
+import com.lolatech.selectionsystem.repository.RoleRepository;
 import com.lolatech.selectionsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,16 +14,16 @@ import java.util.HashSet;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private PermissionRepository permissionRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PermissionRepository permissionRepository,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,
+                       BCryptPasswordEncoder bCryptPasswordEncoder) {
 
         this.userRepository = userRepository;
-        this.permissionRepository = permissionRepository;
+        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -34,8 +34,8 @@ public class UserService {
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);
-        Permission userPermission = permissionRepository.findByPermission("ADMIN");
-        user.setPermissions(new HashSet<>(Collections.singletonList(userPermission)));
+        Role userRole = roleRepository.findByRole("ADMIN");
+        user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
         userRepository.save(user);
         return user;
     }

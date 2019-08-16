@@ -1,7 +1,7 @@
 package com.lolatech.selectionsystem;
 
 import com.lolatech.selectionsystem.model.User;
-import com.lolatech.selectionsystem.repository.PermissionRepository;
+import com.lolatech.selectionsystem.repository.RoleRepository;
 import com.lolatech.selectionsystem.repository.UserRepository;
 import com.lolatech.selectionsystem.service.UserService;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class UserServiceTest {
     private UserRepository mockUserRepository;
 
     @Mock
-    private PermissionRepository mockPermissionRepository;
+    private RoleRepository mockRoleRepository;
 
     @Mock
     private BCryptPasswordEncoder mockBCryptPasswordEncoder;
@@ -33,7 +33,7 @@ public class UserServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        userServiceTest = new UserService(mockUserRepository, mockPermissionRepository, mockBCryptPasswordEncoder);
+        userServiceTest = new UserService(mockUserRepository, mockRoleRepository, mockBCryptPasswordEncoder);
         userTest = User.builder()
                     .id(1L)
                     .email("test@test.com")
